@@ -1,4 +1,4 @@
-# commercetools-ts-sdk-developer-training
+# commercetools-php-sdk-developer-training
 
 A training project demonstrating the commercetools PHP SDK in a fullstack setup using **Laravel** for the Backend-for-Frontend (BFF) and a lightweight frontend built with **HTML, CSS, and JavaScript**.
 
