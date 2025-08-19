@@ -40,8 +40,15 @@ class CustomersController extends Controller
     {
         $dto = $request->toDto();
         try {
-            $customer = $this->customersService->createCustomer($storeKey, $dto);
-            return response()->json($customer, 201);
+            $customerSignInResult = $this->customersService->createCustomer($storeKey, $dto);
+            if ($customerSignInResult->getCustomer() === null) {
+                return response()->json([
+                    'message' => 'Not implemented.',
+                ], 501);
+            }
+
+            return response()->json($customerSignInResult, 201);
+
         } catch (\Throwable $e) {
             return response()->json([
                 'error' => 'Failed to create customer',
@@ -57,8 +64,15 @@ class CustomersController extends Controller
     {
         $dto = $request->toDto();
         try {
-            $customer = $this->customersService->loginCustomer($storeKey, $dto);
-            return response()->json($customer, 200);
+            $customerSignInResult = $this->customersService->loginCustomer($storeKey, $dto);
+            if ($customerSignInResult->getCustomer() === null) {
+                return response()->json([
+                    'message' => 'Not implemented.',
+                ], 501);
+            }
+
+            return response()->json($customerSignInResult, 200);
+
         } catch (\Throwable $e) {
             return response()->json([
                 'error' => 'Failed to login customer',

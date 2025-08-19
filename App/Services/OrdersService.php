@@ -8,6 +8,7 @@ use App\Services\ClientService;
 use Commercetools\Api\Client\Resource\ResourceByProjectKey;
 use Commercetools\Api\Models\Cart\CartResourceIdentifierBuilder;
 use Commercetools\Api\Models\Order\Order;
+use Commercetools\Api\Models\Order\OrderBuilder;
 use Commercetools\Api\Models\Order\OrderFromCartDraftBuilder;
 use Commercetools\Api\Models\Order\OrderSetCustomTypeActionBuilder;
 use Commercetools\Api\Models\Order\OrderUpdateActionCollection;
@@ -67,18 +68,11 @@ class OrdersService
      */
     public function createOrder(string $storeKey, OrderDTO $orderDTO): Order
     {
-        return $this->api
-            ->inStoreKeyWithStoreKeyValue($storeKey)
-            ->orders()
-            ->post(OrderFromCartDraftBuilder::of()
-                ->withCart(CartResourceIdentifierBuilder::of()
-                    ->withId($orderDTO->cartId)
-                    ->build())
-                ->withVersion($orderDTO->cartVersion)
-                ->withOrderNumber('ORD-' . strtoupper(Str::random(6)))
-                ->build()
-            )
-            ->execute();
+        // TODO: Implement the order creation logic
+        // TODO: Create an order using the cardId and version in the request
+        // TODO: generate a unique order number
+
+        return OrderBuilder::of()->build();
     }
 
     /**
@@ -93,27 +87,7 @@ class OrdersService
         string $orderNumber,
         OrderCustomFieldsDTO $customFields): Order
     {
-        $order = $this->getOrderByOrderNumber($storeKey, $orderNumber);
-
-        $orderUpdateActions = OrderUpdateActionCollection::of()
-            ->add(OrderSetCustomTypeActionBuilder::of()
-                ->withType(TypeResourceIdentifierBuilder::of()
-                    ->withKey('delivery-instructions11')
-                    ->build())
-                ->withFields(FieldContainerBuilder::of()
-                    ->put('instructions', $customFields->instructions)
-                    ->put('time', $customFields->time)
-                    ->build())
-                ->build());
-        return $this->api
-            ->inStoreKeyWithStoreKeyValue($storeKey)
-            ->orders()
-            ->withOrderNumber($orderNumber)
-            ->post(OrderUpdateBuilder::of()
-                ->withVersion($order->getVersion())
-                ->withActions($orderUpdateActions)
-                ->build()
-            )
-            ->execute();
+        // TODO: Update the order with custom delivery instructions
+        return OrderBuilder::of()->build();
     }
 }

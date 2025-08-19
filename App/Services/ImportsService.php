@@ -11,6 +11,7 @@ use Commercetools\Import\Models\Common\LocalizedStringBuilder;
 use Commercetools\Import\Models\Common\MoneyBuilder;
 use Commercetools\Import\Models\Common\ProductTypeKeyReferenceBuilder;
 use Commercetools\Import\Models\Importrequests\ImportResponse;
+use Commercetools\Import\Models\Importrequests\ImportResponseBuilder;
 use Commercetools\Import\Models\Importrequests\ProductDraftImportRequestBuilder;
 use Commercetools\Import\Models\Importsummaries\ImportSummary;
 use Commercetools\Import\Models\Productdrafts\PriceDraftImportBuilder;
@@ -32,35 +33,15 @@ class ImportsService
     }
 
     /**
-     * @param string $containerKey
-     * @return ImportSummary
-     * @throws ApiClientException
-     */
-    public function getImportSummary(): ImportSummary
-    {
-        return $this->importApi
-            ->importContainers()
-            ->withImportContainerKeyValue($this->containerKey)
-            ->importSummaries()
-            ->get()
-            ->execute();
-    }
-
-    /**
      * @param UploadedFile $file
      * @return ImportResponse
      * @throws ApiClientException
      */
     public function importProducts(UploadedFile $file): ImportResponse
     {
-        return $this->importApi
-            ->productDrafts()
-            ->importContainers()
-            ->withImportContainerKeyValue($this->containerKey)
-            ->post(ProductDraftImportRequestBuilder::of()
-                ->withResources($this->createImportProductDraftCollection($file))
-                ->build())
-            ->execute();
+        // TODO: Import products from the csv file
+        // TODO: Update and use createImportProductDraftCollection function to parse the csv file
+        return ImportResponseBuilder::of()->build();
     }
 
     /**
@@ -151,5 +132,19 @@ class ImportsService
         return $dataArray;
     }
 
+    /**
+     * @param string $containerKey
+     * @return ImportSummary
+     * @throws ApiClientException
+     */
+    public function getImportSummary(): ImportSummary
+    {
+        return $this->importApi
+            ->importContainers()
+            ->withImportContainerKeyValue($this->containerKey)
+            ->importSummaries()
+            ->get()
+            ->execute();
+    }
 
 }

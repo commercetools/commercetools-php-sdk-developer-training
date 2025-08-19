@@ -43,6 +43,16 @@ class ShippingMethodController extends Controller
         }
         try {
             $methods = $this->shippingService->getShippingMethodsByLocation($country);
+            if ($methods->getResults() === null) {
+                return response()->json([
+                    'message' => 'Not implemented.',
+                ], 501);
+            }
+            if ($methods->getCount() === 0) {
+                return response()->json([
+                    'message' => 'No shipping methods found for the specified location.',
+                ], 404);
+            }
             return response()->json($methods);
         } catch (\Throwable $e) {
             return response()->json([
@@ -59,6 +69,11 @@ class ShippingMethodController extends Controller
     {
         try {
             $method = $this->shippingService->getShippingMethodByKey($key);
+            if ($method->getVersion() === null) {
+                return response()->json([
+                    'message' => 'Not implemented.',
+                ], 501);
+            }
             return response()->json($method);
         } catch (\Throwable $e) {
             return response()->json([

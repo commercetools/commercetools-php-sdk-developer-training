@@ -41,6 +41,11 @@ class ImportsController extends Controller
         $csvFile = $request->file('file');
         try {
             $response = $this->importsService->importProducts($csvFile);
+            if ($response->getOperationStatus() === null) {
+                return response()->json([
+                    'message' => 'Not implemented.',
+                ], 501);
+            }
             return response()->json($response, 200);
         } catch (\Throwable $e) {
             return response()->json([
