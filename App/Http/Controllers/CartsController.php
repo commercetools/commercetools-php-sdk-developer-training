@@ -42,6 +42,11 @@ class CartsController extends Controller
         $dto = $request->toDto();
         try {
             $cart = $this->cartsService->createCart($storeKey, $dto);
+            if ($cart->getVersion() === null) {
+                return response()->json([
+                    'message' => 'Not implemented.',
+                ], 501);
+            }
             return response()->json($cart, 201);
         } catch (\Throwable $e) {
             return response()->json([
@@ -92,6 +97,11 @@ class CartsController extends Controller
     {
         try {
             $cart = $this->cartsService->setShippingAddress($storeKey, $id, $request->toAddress());
+            if ($cart->getVersion() === null) {
+                return response()->json([
+                    'message' => 'Not implemented.',
+                ], 501);
+            }
             return response()->json($cart, 200);
         } catch (\Throwable $e) {
             return response()->json([

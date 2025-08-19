@@ -41,6 +41,11 @@ class OrdersController extends Controller
         $dto = $request->toDto();
         try {
             $order = $this->ordersService->createOrder($storeKey, $dto);
+            if ($order->getVersion() === null) {
+                return response()->json([
+                    'message' => 'Not implemented.',
+                ], 501);
+            }
             return response()->json($order, 201);
         } catch (\Throwable $e) {
             return response()->json([
@@ -58,6 +63,11 @@ class OrdersController extends Controller
         $dto = $request->toDto();
         try {
             $order = $this->ordersService->updateOrderCustomFields($storeKey, $orderNumber, $dto);
+            if ($order->getVersion() === null) {
+                return response()->json([
+                    'message' => 'Not implemented.',
+                ], 501);
+            }
             return response()->json($order, 200);
         } catch (\Throwable $e) {
             return response()->json([

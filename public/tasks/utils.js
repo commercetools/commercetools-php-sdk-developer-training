@@ -1,19 +1,30 @@
 function handleResponse(response) {
+  if (response.status === 204) {
+    return null;
+  }
+
   if (response.status === 501) {
-    return response.json().then((error) => {
+    return response.json().then(() => {
       throw new Error('The function is not implemented on the server.');
     });
   }
+
   if (response.status === 404) {
-    throw new Error('Not found.');
-  }
-  if (!response.ok) {
-    return response.json().then((error) => {
-      throw new Error(error.message);
+    return response.json().then(() => {
+      throw new Error('Not found.');
     });
   }
+
+  if (!response.ok) {
+    return response.json().then((error) => {
+      const message = error?.message || 'An unexpected error occurred.';
+      throw new Error(message);
+    });
+  }
+  
   return response.json();
 }
+
 
 function getCountries() {
   const url = '/api/project/countries';

@@ -10,6 +10,7 @@ use Commercetools\Api\Models\Customer\Customer;
 use Commercetools\Api\Models\Customer\CustomerDraftBuilder;
 use Commercetools\Api\Models\Customer\CustomerSigninBuilder;
 use Commercetools\Api\Models\Customer\CustomerSignInResult;
+use Commercetools\Api\Models\Customer\CustomerSignInResultBuilder;
 use commercetools\Exception\ApiClientException;
 
 
@@ -62,33 +63,8 @@ class CustomersService
      */
     public function createCustomer(string $storeKey, CustomerDTO $customerDTO): CustomerSignInResult
     {
-
-        $customerDraft = CustomerDraftBuilder::of()
-            ->withKey($customerDTO->key)
-            ->withEmail($customerDTO->email)
-            ->withFirstName($customerDTO->firstName)
-            ->withLastName($customerDTO->lastName)
-            ->withPassword($customerDTO->password)
-            ->withAddresses(BaseAddressCollection::of()
-                ->add($customerDTO->address)
-            );
-
-        if ($customerDTO->isDefaultShippingAddress) {
-            $customerDraft = $customerDraft->withDefaultShippingAddress(0);
-        }
-        if ($customerDTO->isDefaultBillingAddress) {
-            $customerDraft = $customerDraft->withDefaultBillingAddress(0);
-        }
-
-        if ($customerDTO->anonymousCartId !== null) {
-            $customerDraft = $customerDraft->withAnonymousCartId($customerDTO->anonymousCartId);
-        }
-
-        return $this->api
-            ->inStoreKeyWithStoreKeyValue($storeKey)
-            ->customers()
-            ->post($customerDraft->build())
-            ->execute();
+        // TODO: Create (signup) a customer and assign the anonymous cart from the request to them
+        return CustomerSignInResultBuilder::of()->build();
     }
 
     /**
@@ -99,20 +75,8 @@ class CustomersService
      */
     public function loginCustomer(string $storeKey, CustomerDTO $customerDTO): CustomerSignInResult
     {
-        $customerSignInBuilder = CustomerSigninBuilder::of()
-            ->withEmail($customerDTO->email)
-            ->withPassword($customerDTO->password);
-
-        if ($customerDTO->anonymousCartId !== null) {
-            $customerSignInBuilder = $customerSignInBuilder->withAnonymousCartId($customerDTO->anonymousCartId)
-                ->withAnonymousCartSignInMode("merge");
-        }
-
-        return $this->api
-            ->inStoreKeyWithStoreKeyValue($storeKey)
-            ->login()
-            ->post($customerSignInBuilder->build())
-            ->execute();
+        // TODO: Login (signin) a customer and assign the anonymous cart from the request to them
+        return CustomerSignInResultBuilder::of()->build();
     }
 
 }

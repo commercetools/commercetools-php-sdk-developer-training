@@ -8,6 +8,7 @@ use Commercetools\Api\Client\Resource\ResourceByProjectKey;
 use Commercetools\Api\Models\Cart\Cart;
 use Commercetools\Api\Models\Cart\CartAddDiscountCodeActionBuilder;
 use Commercetools\Api\Models\Cart\CartAddLineItemActionBuilder;
+use Commercetools\Api\Models\Cart\CartBuilder;
 use Commercetools\Api\Models\Cart\CartDraftBuilder;
 use Commercetools\Api\Models\Cart\CartSetCustomerEmailActionBuilder;
 use Commercetools\Api\Models\Cart\CartSetShippingAddressActionBuilder;
@@ -54,21 +55,8 @@ class CartsService
      */
     public function createCart(string $storeKey, CartDTO $CartDTO): Cart
     {
-        return $this->api
-            ->inStoreKeyWithStoreKeyValue($storeKey)
-            ->carts()
-            ->post(CartDraftBuilder::of()
-                ->withCurrency($CartDTO->currency)
-                ->withCountry($CartDTO->country)
-                ->withLineItems(LineItemDraftCollection::of()
-                    ->add(LineItemDraftBuilder::of()
-                        ->withQuantity($CartDTO->quantity ?? 1)
-                        ->withSku($CartDTO->sku)
-                        ->build()
-                    )
-                )->build()
-            )
-            ->execute();
+        // TODO: Create a cart with anonymousId and add SKU as a line item
+        return CartBuilder::of()->build();
     }
 
     /**
@@ -80,23 +68,8 @@ class CartsService
      */
     public function addLineItem(string $storeKey, string $id, CartDTO $CartDTO): Cart
     {
-        $cart = $this->getCartById($storeKey, $id);
-
-        return $this->api
-            ->inStoreKeyWithStoreKeyValue($storeKey)
-            ->carts()
-            ->withId($id)
-            ->post(CartUpdateBuilder::of()
-                ->withActions(CartUpdateActionCollection::of()
-                    ->add(CartAddLineItemActionBuilder::of()
-                        ->withSku($CartDTO->sku)
-                        ->withQuantity($CartDTO->quantity ?? 1)
-                        ->build()
-                    ))
-                ->withVersion($cart->getVersion())
-                ->build()
-            )
-            ->execute();
+        // TODO: Add SKU to the cart
+        return CartBuilder::of()->build();
     }
 
     /**
@@ -134,27 +107,9 @@ class CartsService
      */
     public function setShippingAddress(string $storeKey, string $id, AddressModel $address): Cart
     {
-
-        $cart = $this->getCartById($storeKey, $id);
-
-        return $this->api
-            ->inStoreKeyWithStoreKeyValue($storeKey)
-            ->carts()
-            ->withId($id)
-            ->post(CartUpdateBuilder::of()
-                ->withActions(CartUpdateActionCollection::of()
-                    ->add(CartSetShippingAddressActionBuilder::of()
-                        ->withAddress($address)
-                        ->build()
-                    )
-                    ->add(CartSetCustomerEmailActionBuilder::of()
-                        ->withEmail($address->getEmail())
-                        ->build()
-                    ))
-                ->withVersion($cart->getVersion())
-                ->build()
-            )
-            ->execute();
+        // TODO: Set Shipping address on the cart
+        // TODO: Set email on the cart
+        return CartBuilder::of()->build();
     }
 
     /**

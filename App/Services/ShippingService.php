@@ -4,8 +4,11 @@ namespace App\Services;
 
 use App\Services\ClientService;
 use Commercetools\Api\Client\Resource\ResourceByProjectKey;
+use Commercetools\Api\Models\Cart\Shipping;
 use Commercetools\Api\Models\ShippingMethod\ShippingMethod;
+use Commercetools\Api\Models\ShippingMethod\ShippingMethodBuilder;
 use Commercetools\Api\Models\ShippingMethod\ShippingMethodPagedQueryResponse;
+use Commercetools\Api\Models\ShippingMethod\ShippingMethodPagedQueryResponseBuilder;
 use commercetools\Exception\ApiClientException;
 
 // use Laravel\Pail\ValueObjects\Origin\Console;
@@ -38,11 +41,8 @@ class ShippingService
      */
     public function getShippingMethodByKey(string $key): ShippingMethod
     {
-        return $this->api
-            ->shippingMethods()
-            ->withKey($key)
-            ->get()
-            ->execute();
+        // TODO: Implement the logic to return the shipping method by key
+        return ShippingMethodBuilder::of()->build();
     }
 
     /**
@@ -52,12 +52,8 @@ class ShippingService
      */
     public function getShippingMethodsByLocation(string $location): ShippingMethodPagedQueryResponse
     {
-        return $this->api
-            ->shippingMethods()
-            ->matchingLocation()
-            ->get()
-            ->withCountry($location)
-            ->execute();
+        // TODO: Implement the logic to return a list of shipping methods valid for a country
+        return ShippingMethodPagedQueryResponseBuilder::of()->build();
     }
 
     /**
@@ -67,13 +63,9 @@ class ShippingService
      */
     public function checkShippingMethodExistence(string $key): bool
     {
-       echo "Checking existence of shipping method with key: $key";
+
         try {
-            $this->api
-                ->shippingMethods()
-                ->withKey($key)
-                ->head()
-                ->execute();
+            // TODO: Check if the shipping method exists by making a HEAD request
             return true;
         } catch (ApiClientException $e) {
             if ($e->getCode() === 404) {
