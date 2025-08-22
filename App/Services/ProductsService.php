@@ -14,10 +14,14 @@ use Commercetools\Api\Models\Search\SearchSortingBuilder;
 use Commercetools\Api\Models\Search\SearchSortingCollection;
 use Commercetools\Api\Models\ProductSearch\ProductSearchFacetExpressionCollection;
 use Commercetools\Api\Models\ProductSearch\ProductSearchProjectionParamsBuilder;
+use Commercetools\Api\Models\Search\SearchAndExpressionBuilder;
 use Commercetools\Api\Models\Search\SearchExactExpressionBuilder;
 use Commercetools\Api\Models\Search\SearchExactValueBuilder;
+use Commercetools\Api\Models\Search\SearchFullTextExpressionBuilder;
+use Commercetools\Api\Models\Search\SearchFullTextValueBuilder;
 use Commercetools\Api\Models\Search\SearchQuery;
-
+use Commercetools\Api\Models\Search\SearchQueryCollection;
+use Illuminate\Support\Facades\Log;
 
 class ProductsService
 {
@@ -49,9 +53,11 @@ class ProductsService
                 ->build()
             )
             ->withMarkMatchingVariants(true);
-        // if ($SearchDTO->facets === true) {
-        //     $productSearchRequest->withFacets($this->addFacets($SearchDTO));
-        // }
+
+        if ($SearchDTO->facets === true) {
+            $productSearchRequest->withFacets($this->addFacets($SearchDTO));
+        }
+
         if (!empty($SearchDTO->keyword)) {
             $storeId = $this->api
                 ->stores()
@@ -79,43 +85,37 @@ class ProductsService
                     ->withLanguage($SearchDTO->locale)
                     ->withLevel("variants")
                     ->withScope("all")
-                    ->build()))
+                    ->build())->build())
             ->add(ProductSearchFacetDistinctExpressionBuilder::of()
                 ->withDistinct(ProductSearchFacetDistinctValueBuilder::of()
                     ->withField("variants.attributes.search-finish.label")
                     ->withName("Finish")
                     ->withFieldType("lenum")
-                    ->withLanguage($$SearchDTO->locale)
+                    ->withLanguage($SearchDTO->locale)
                     ->withLevel("variants")
                     ->withScope("all")
-                    ->build()));
+                    ->build())->build());
     }
 
     private function addQuery(SearchDTO $SearchDTO, string $storeId): SearchQuery
     {
-        return SearchExactExpressionBuilder::of()
-                ->withExact(SearchExactValueBuilder::of()
-                    ->withField("stores")
-                    ->withValue($storeId)
-                    ->withFieldType("set_reference")
-                    ->build())
-                ->build();
-        // return SearchAndExpressionBuilder::of()
-        //     ->withAnd(
-        //         SearchQueryCollection::of()
-        //                 ->add(SearchFullTextExpressionBuilder::of()
-        //                     ->withFullText(SearchFullTextValueBuilder::of()
-        //                         ->withField("name")
-        //                         ->withLanguage($SearchDTO->locale)
-        //                         ->withValue($SearchDTO->keyword)
-        //                         ->withMustMatch("all")
-        //                         ->build()))
-        //                 ->add(SearchExactExpressionBuilder::of()
-        //                     ->withExact(SearchExactValueBuilder::of()
-        //                         ->withField("stores")
-        //                         ->withValue($storeId)
-        //                         ->withFieldType("set_reference")
-        //                         ->build()))
-        //     )->build();
+
+        return SearchAndExpressionBuilder::of()
+            ->withAnd(
+                SearchQueryCollection::of()
+                        ->add(SearchFullTextExpressionBuilder::of()
+                            ->withFullText(SearchFullTextValueBuilder::of()
+                                ->withField("name")
+                                ->withLanguage($SearchDTO->locale)
+                                ->withValue($SearchDTO->keyword)
+                                ->withMustMatch("all")
+                                ->build())->build())
+                        ->add(SearchExactExpressionBuilder::of()
+                            ->withExact(SearchExactValueBuilder::of()
+                                ->withField("stores")
+                                ->withValue($storeId)
+                                ->withFieldType("set_reference")
+                                ->build())->build())
+            )->build();
     }
 }

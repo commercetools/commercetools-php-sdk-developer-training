@@ -9,6 +9,7 @@ use Commercetools\Client\ApiRequestBuilder;
 use Commercetools\Client\ClientCredentials;
 use Commercetools\Client\ClientFactory;
 use Commercetools\Import\Client\ImportRequestBuilder;
+use Illuminate\Support\Facades\Log;
 
 class ClientService
 {
@@ -23,7 +24,8 @@ class ClientService
                 new ClientCredentialsConfig(new ClientCredentials(
                     config('services.commercetools.client_id'),
                 config('services.commercetools.client_secret')
-                ))
+                )),
+                Log::getLogger()
             );
 
             $this->apiClient = new ApiRequestBuilder(

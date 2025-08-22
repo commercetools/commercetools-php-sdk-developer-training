@@ -7,6 +7,7 @@ use App\Http\Requests\CustomerRequest;
 use App\Services\CustomersService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CustomersController extends Controller
 {
@@ -26,6 +27,7 @@ class CustomersController extends Controller
             $customer = $this->customersService->getCustomerById($storeKey, $id);
             return response()->json($customer);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to fetch customer',
                 'message' => $e->getMessage(),
@@ -43,6 +45,7 @@ class CustomersController extends Controller
             $customer = $this->customersService->createCustomer($storeKey, $dto);
             return response()->json($customer, 201);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to create customer',
                 'message' => $e->getMessage(),
@@ -60,6 +63,7 @@ class CustomersController extends Controller
             $customer = $this->customersService->loginCustomer($storeKey, $dto);
             return response()->json($customer, 200);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to login customer',
                 'message' => $e->getMessage(),

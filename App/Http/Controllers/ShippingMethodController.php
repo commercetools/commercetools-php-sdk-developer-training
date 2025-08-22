@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ShippingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ShippingMethodController extends Controller
 {
@@ -25,6 +26,7 @@ class ShippingMethodController extends Controller
             $methods = $this->shippingService->getShippingMethods();
             return response()->json($methods);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to fetch shipping methods',
                 'message' => $e->getMessage(),
@@ -45,6 +47,7 @@ class ShippingMethodController extends Controller
             $methods = $this->shippingService->getShippingMethodsByLocation($country);
             return response()->json($methods);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to fetch shipping methods',
                 'message' => $e->getMessage(),
@@ -61,6 +64,7 @@ class ShippingMethodController extends Controller
             $method = $this->shippingService->getShippingMethodByKey($key);
             return response()->json($method);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to fetch shipping method',
                 'message' => $e->getMessage(),
@@ -77,6 +81,7 @@ class ShippingMethodController extends Controller
             $exists = $this->shippingService->checkShippingMethodExistence($key);
             return $exists ? response()->json(true, 200) : response()->json(false, 404);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to check shipping method existence',
                 'message' => $e->getMessage(),
@@ -100,6 +105,7 @@ class ShippingMethodController extends Controller
             $methods = $this->shippingService->getShippingMethodsMatchingInStoreCart($storeKey, $cartId);
             return response()->json($methods);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to fetch matching shipping methods',
                 'message' => $e->getMessage(),

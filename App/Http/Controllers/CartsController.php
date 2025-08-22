@@ -8,6 +8,7 @@ use App\Http\Requests\CartCreateRequest;
 use App\Services\CartsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CartsController extends Controller
 {
@@ -27,6 +28,7 @@ class CartsController extends Controller
             $cart = $this->cartsService->getCartById($storeKey, $id);
             return response()->json($cart);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to fetch cart',
                 'message' => $e->getMessage(),
@@ -44,6 +46,7 @@ class CartsController extends Controller
             $cart = $this->cartsService->createCart($storeKey, $dto);
             return response()->json($cart, 201);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to create cart',
                 'message' => $e->getMessage(),
@@ -61,6 +64,7 @@ class CartsController extends Controller
             $cart = $this->cartsService->addLineItem($storeKey, $id, $dto);
             return response()->json($cart, 200);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to add line item',
                 'message' => $e->getMessage(),
@@ -78,6 +82,7 @@ class CartsController extends Controller
             $cart = $this->cartsService->addDiscountCode($storeKey, $id, $code);
             return response()->json($cart, 200);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to add discount code',
                 'message' => $e->getMessage(),
@@ -94,6 +99,7 @@ class CartsController extends Controller
             $cart = $this->cartsService->setShippingAddress($storeKey, $id, $request->toAddress());
             return response()->json($cart, 200);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to set shipping address',
                 'message' => $e->getMessage(),
@@ -111,6 +117,7 @@ class CartsController extends Controller
             $cart = $this->cartsService->setShippingMethod($storeKey, $id, $shippingMethodId);
             return response()->json($cart, 200);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to set shipping method',
                 'message' => $e->getMessage(),
