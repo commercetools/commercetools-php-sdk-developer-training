@@ -7,6 +7,7 @@ use App\Http\Requests\OrderCustomFieldsRequest;
 use App\Http\Requests\OrderRequest;
 use App\Services\OrdersService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class OrdersController extends Controller
 {
@@ -26,6 +27,7 @@ class OrdersController extends Controller
             $order = $this->ordersService->getOrderById($storeKey, $id);
             return response()->json($order);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to fetch order',
                 'message' => $e->getMessage(),
@@ -48,6 +50,7 @@ class OrdersController extends Controller
             }
             return response()->json($order, 201);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to create order',
                 'message' => $e->getMessage(),
@@ -70,6 +73,7 @@ class OrdersController extends Controller
             }
             return response()->json($order, 200);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to update order custom fields',
                 'message' => $e->getMessage(),

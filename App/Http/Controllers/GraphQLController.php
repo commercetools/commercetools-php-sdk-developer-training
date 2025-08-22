@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\GraphQLService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GraphQLController extends Controller
 {
@@ -27,6 +28,7 @@ class GraphQLController extends Controller
             $response = $this->graphQLService->getOrdersByCustomerEmail($email, $locale);
             return response()->json($response, 200);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to fetch orders',
                 'message' => $e->getMessage(),

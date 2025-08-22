@@ -7,7 +7,6 @@ use App\Services\ClientService;
 use Commercetools\Api\Client\Resource\ResourceByProjectKey;
 use Commercetools\Api\Models\GraphQl\GraphQLRequestBuilder;
 use Commercetools\Api\Models\GraphQl\GraphQLResponse;
-use Commercetools\Api\Models\GraphQl\GraphQLVariablesMapBuilder;
 use Commercetools\Exception\ApiClientException;
 
 class GraphQLService

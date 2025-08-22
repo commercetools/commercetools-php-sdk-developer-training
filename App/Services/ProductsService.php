@@ -51,11 +51,12 @@ class ProductsService
             )
             ->withMarkMatchingVariants(true);
 
-        // if ($SearchDTO->facets === true) {
+        if ($SearchDTO->facets === true) {
             // TODO: Add faceted search
             // TODO: Implement the login in addFacets function
-        //     $productSearchRequest->withFacets($this->addFacets($SearchDTO));
-        // }
+            $productSearchRequest->withFacets($this->addFacets($SearchDTO));
+        }
+
         if (!empty($SearchDTO->keyword)) {
 
             $storeId = $this->getStoreIdByKey($SearchDTO->storeKey);
@@ -63,8 +64,8 @@ class ProductsService
             // TODO: Add keyword search
             // TODO: Implement the logic in addQuery function
             $productSearchRequest->withQuery($this->addQuery($SearchDTO, $storeId));
-
         }
+        
         return $this->api
             ->products()
             ->search()

@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Services\ImportsService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 
 class ImportsController extends Controller
 {
@@ -26,6 +27,7 @@ class ImportsController extends Controller
             $summary = $this->importsService->getImportSummary();
             return response()->json($summary);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to fetch import summary',
                 'message' => $e->getMessage(),
@@ -48,6 +50,7 @@ class ImportsController extends Controller
             }
             return response()->json($response, 200);
         } catch (\Throwable $e) {
+            Log::error("Error: {$e->getMessage()}");
             return response()->json([
                 'error' => 'Failed to import products',
                 'message' => $e->getMessage(),
