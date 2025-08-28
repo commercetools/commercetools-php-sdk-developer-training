@@ -28,6 +28,7 @@ class ShippingService
         return $this->api
             ->shippingMethods()
             ->get()
+            ->withExpand("zoneRates[*].zone")
             ->execute();
     }
 
@@ -42,6 +43,7 @@ class ShippingService
             ->shippingMethods()
             ->withKey($key)
             ->get()
+            ->withExpand("zoneRates[*].zone")
             ->execute();
     }
 
@@ -57,6 +59,7 @@ class ShippingService
             ->matchingLocation()
             ->get()
             ->withCountry($location)
+            ->withExpand("zoneRates[*].zone")
             ->execute();
     }
 
@@ -67,7 +70,6 @@ class ShippingService
      */
     public function checkShippingMethodExistence(string $key): bool
     {
-       echo "Checking existence of shipping method with key: $key";
         try {
             $this->api
                 ->shippingMethods()
@@ -97,6 +99,7 @@ class ShippingService
             ->matchingCart()
             ->get()
             ->withCartId($cartId)
+            ->withExpand("zoneRates[*].zone")
             ->execute();
     }
 

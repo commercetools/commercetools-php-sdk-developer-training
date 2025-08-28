@@ -59,14 +59,10 @@ class ProductsService
         }
 
         if (!empty($SearchDTO->keyword)) {
-            $storeId = $this->api
-                ->stores()
-                ->withKey($SearchDTO->storeKey)
-                ->get()
-                ->execute()
-                ->getId();
+            $storeId = $this->getStoreIdByKey($SearchDTO->storeKey);
             $productSearchRequest->withQuery($this->addQuery($SearchDTO, $storeId));
         }
+        
         return $this->api
             ->products()
             ->search()
@@ -117,5 +113,15 @@ class ProductsService
                                 ->withFieldType("set_reference")
                                 ->build())->build())
             )->build();
+    }
+
+    private function getStoreIdByKey(string $storeKey): string
+    {
+        return $this->api
+            ->stores()
+            ->withKey($storeKey)
+            ->get()
+            ->execute()
+            ->getId();
     }
 }
